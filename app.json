@@ -13,8 +13,10 @@
       "infoPlist": {
         "NSAppTransportSecurity": {
           "NSAllowsArbitraryLoads": true
-        }
-      }
+        },
+        "ITSAppUsesNonExemptEncryption": false
+      },
+      "bundleIdentifier": "com.evolvenext.sdws"
     },
     "android": {
       "adaptiveIcon": {
@@ -57,4 +59,3 @@
     "owner": "4nkit5hukla"
   }
 }
-

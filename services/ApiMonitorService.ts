@@ -192,10 +192,11 @@ export function useApiMonitor() {
   }, [intervalInMS, isMonitoring, setupMonitoring]);
 
   return {
+    checkAllEndpoints,
+    hasFailures,
     isMonitoring,
+    snoozeAlarm,
     startMonitoring,
     stopMonitoring,
-    checkAllEndpoints,
-    snoozeAlarm,
   };
 }

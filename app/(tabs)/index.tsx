@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Alert, Button, ScrollView, StyleSheet, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { AddApiModal } from "@/components/AddApiModal";
 import { ApiList } from "@/components/ApiList";
@@ -11,11 +12,11 @@ import { useAppData } from "@/contexts/Appdata";
 import { useApiMonitor } from "@/services/ApiMonitorService";
 
 export default function HomeScreen() {
-  const { endpoints, intervalValue, setEndpoints, statuses, setIntervalValue } = useAppData();
-  const { isMonitoring, startMonitoring, stopMonitoring, snoozeAlarm } = useApiMonitor();
+  const { endpoints, intervalValue, setEndpoints, setIntervalValue } = useAppData();
+  const { isMonitoring, startMonitoring, stopMonitoring, hasFailures, snoozeAlarm } = useApiMonitor();
   const [addApiModalVisible, setAddApiModalVisible] = useState(false);
   const [intervalModalVisible, setIntervalModalVisible] = useState(false);
-  const hasFailures = statuses.some((status) => !status.isUp);
+  const insets = useSafeAreaInsets();
 
   // Show alert when failures are detected
   useEffect(() => {
@@ -33,63 +34,77 @@ export default function HomeScreen() {
   };
 
   return (
-    <ScrollView>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome User!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-
-      <ThemedView style={styles.headContainer}>
-        <ThemedText type="subtitle">API List</ThemedText>
-        <ThemedText type="subtitle">{intervalValue} Sec</ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.headContainer}>
-        <Button title="Add API" onPress={() => setAddApiModalVisible(true)} />
-        <Button title="Change Interval" onPress={() => setIntervalModalVisible(true)} />
-      </ThemedView>
-
-      <ThemedView style={styles.monitoringContainer}>
-        <ThemedText type="subtitle">Monitoring Status</ThemedText>
-        <View style={styles.monitoringControls}>
-          <Button
-            title={isMonitoring ? "Stop Monitoring" : "Start Monitoring"}
-            onPress={isMonitoring ? stopMonitoring : startMonitoring}
-            color={isMonitoring ? "red" : "green"}
-          />
-          <ThemedText style={styles.statusText}>{isMonitoring ? "Active" : "Inactive"}</ThemedText>
-        </View>
-        {hasFailures && isMonitoring && (
-          <View style={styles.alarmControls}>
-            <Button title="Snooze Alarm" onPress={snoozeAlarm} color="orange" />
-            <ThemedText style={styles.alarmText}>⚠️ API Failures Detected</ThemedText>
-          </View>
-        )}
-      </ThemedView>
-      {endpoints.length === 0 ? (
-        <ThemedView style={styles.emptyContainer}>
-          <ThemedText>No API endpoints added yet</ThemedText>
+    <ThemedView style={styles.container}>
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={{
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom + 70, // Add extra padding for tab bar
+          paddingLeft: insets.left,
+          paddingRight: insets.right,
+        }}
+      >
+        <ThemedView style={styles.titleContainer}>
+          <ThemedText type="title">Welcome User!</ThemedText>
+          <HelloWave />
         </ThemedView>
-      ) : (
-        <ApiList onRemove={handleRemoveEndpoint} />
-      )}
+        <ThemedView style={styles.headContainer}>
+          <ThemedText type="subtitle">API List</ThemedText>
+          <ThemedText type="subtitle">{intervalValue} Sec</ThemedText>
+        </ThemedView>
+        <ThemedView style={styles.headContainer}>
+          <Button title="Add API" onPress={() => setAddApiModalVisible(true)} />
+          <Button title="Change Interval" onPress={() => setIntervalModalVisible(true)} />
+        </ThemedView>
+        <ThemedView style={styles.monitoringContainer}>
+          <ThemedText type="subtitle">Monitoring Status</ThemedText>
+          <View style={styles.monitoringControls}>
+            <Button
+              title={isMonitoring ? "Stop Monitoring" : "Start Monitoring"}
+              onPress={isMonitoring ? stopMonitoring : startMonitoring}
+              color={isMonitoring ? "red" : "green"}
+            />
+            <ThemedText style={styles.statusText}>{isMonitoring ? "Active" : "Inactive"}</ThemedText>
+          </View>
+          {hasFailures && isMonitoring && (
+            <View style={styles.alarmControls}>
+              <Button title="Snooze Alarm" onPress={snoozeAlarm} color="orange" />
+              <ThemedText style={styles.alarmText}>⚠️ API Failures Detected</ThemedText>
+            </View>
+          )}
+        </ThemedView>
+        {endpoints.length === 0 ? (
+          <ThemedView style={styles.emptyContainer}>
+            <ThemedText>No API endpoints added yet</ThemedText>
+          </ThemedView>
+        ) : (
+          <ApiList onRemove={handleRemoveEndpoint} />
+        )}
+      </ScrollView>
       <AddApiModal
-        visible={addApiModalVisible}
-        onClose={() => setAddApiModalVisible(false)}
         onAdd={handleAddEndpoint}
+        visible={addApiModalVisible}
         existingEndpoints={endpoints}
+        onClose={() => setAddApiModalVisible(false)}
       />
 
       <IntervalModal
-        visible={intervalModalVisible}
-        onClose={() => setIntervalModalVisible(false)}
         onSave={setIntervalValue}
+        visible={intervalModalVisible}
         currentInterval={intervalValue}
+        onClose={() => setIntervalModalVisible(false)}
       />
-    </ScrollView>
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+  },
   titleContainer: {
     flexDirection: "row",
     alignItems: "center",
