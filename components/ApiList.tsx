@@ -26,10 +26,10 @@ export function ApiList({ onRemove }: ApiListProps) {
         return (
           <ThemedView style={styles.apiItem}>
             <IconSymbol
-              name={isUp ? "checkmark.circle.fill" : "xmark.circle.fill"}
               size={24}
-              color={isUp ? "green" : "red"}
               style={styles.statusIcon}
+              color={isUp ? "green" : "red"}
+              name={isUp ? "checkmark.circle.fill" : "xmark.circle.fill"}
             />
             <ThemedView style={styles.apiInfo}>
               <ThemedText style={styles.apiText}>{item}</ThemedText>

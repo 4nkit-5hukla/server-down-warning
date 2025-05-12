@@ -87,7 +87,6 @@ export default function HomeScreen() {
         existingEndpoints={endpoints}
         onClose={() => setAddApiModalVisible(false)}
       />
-
       <IntervalModal
         onSave={setIntervalValue}
         visible={intervalModalVisible}
