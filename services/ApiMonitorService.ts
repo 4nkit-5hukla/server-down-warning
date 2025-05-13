@@ -79,10 +79,7 @@ export function useApiMonitor() {
   const checkEndpoint = async (url: string) => {
     try {
       const status = statuses.find((s) => s.url === url);
-      const response = await axios.get(url, {
-        timeout: 10000,
-        signal: AbortSignal.timeout(10000),
-      });
+      const response = await axios.get(url, { timeout: 10000 });
       const currentUpStatus = response.status >= 200 && response.status < 300;
       const currentStatusReturn = {
         url,
