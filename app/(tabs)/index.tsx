@@ -11,11 +11,10 @@ import { useAppData } from "@/contexts/Appdata";
 import { useApiMonitor } from "@/services/ApiMonitorService";
 
 export default function HomeScreen() {
-  const { endpoints, intervalValue, setEndpoints, statuses, setIntervalValue } = useAppData();
-  const { isMonitoring, startMonitoring, stopMonitoring, snoozeAlarm } = useApiMonitor();
+  const { endpoints, intervalValue, setEndpoints, setIntervalValue } = useAppData();
+  const { isMonitoring, hasFailures, startMonitoring, stopMonitoring, snoozeAlarm } = useApiMonitor();
   const [addApiModalVisible, setAddApiModalVisible] = useState(false);
   const [intervalModalVisible, setIntervalModalVisible] = useState(false);
-  const hasFailures = statuses.some((status) => !status.isUp);
 
   // Show alert when failures are detected
   useEffect(() => {
