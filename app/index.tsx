@@ -3,7 +3,6 @@ import { Alert, Button, SafeAreaView, ScrollView, StyleSheet, View } from "react
 
 import { AddApiModal } from "@/components/AddApiModal";
 import { ApiList } from "@/components/ApiList";
-import { HelloWave } from "@/components/HelloWave";
 import { IntervalModal } from "@/components/IntervalModal";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -32,8 +31,8 @@ export default function ApiMonitorHome() {
   };
 
   return (
-    <SafeAreaView>
-      <ScrollView>
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
         <ThemedView style={styles.headContainer}>
           <ThemedText type="subtitle">API List</ThemedText>
           <ThemedText type="subtitle">{intervalValue} Sec</ThemedText>
@@ -84,6 +83,12 @@ export default function ApiMonitorHome() {
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+  },
   headContainer: {
     flexDirection: "row",
     alignItems: "center",
