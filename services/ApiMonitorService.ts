@@ -1,5 +1,5 @@
 import axios, { isAxiosError } from "axios";
-import { Audio } from "expo-av";
+import { Audio, InterruptionModeAndroid, InterruptionModeIOS } from "expo-av";
 import * as BackgroundFetch from "expo-background-fetch";
 import * as TaskManager from "expo-task-manager";
 import { useCallback, useEffect, useRef } from "react";
@@ -121,7 +121,24 @@ export function useApiMonitor() {
   useEffect(() => {
     const loadSound = async () => {
       try {
-        const { sound } = await Audio.Sound.createAsync(require("@/assets/sounds/alarm.mp3"), { isLooping: true });
+        // Configure audio session to use alarm volume stream
+        await Audio.setAudioModeAsync({
+          playsInSilentModeIOS: true,
+          staysActiveInBackground: true,
+          shouldDuckAndroid: true,
+          interruptionModeIOS: InterruptionModeIOS.DoNotMix,
+          interruptionModeAndroid: InterruptionModeAndroid.DoNotMix,
+          playThroughEarpieceAndroid: false,
+        });
+
+        const { sound } = await Audio.Sound.createAsync(require("@/assets/sounds/alarm.mp3"), {
+          isLooping: true,
+          shouldPlay: false,
+        });
+
+        // Set the sound to play at maximum volume
+        await sound.setVolumeAsync(1.0);
+
         soundRef.current = sound;
       } catch (error) {
         console.error("Failed to load alarm sound:", error);

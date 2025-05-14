@@ -17,10 +17,11 @@ export default function ApiMonitorHome() {
 
   // Show alert when failures are detected
   useEffect(() => {
+    if (endpoints.length === 0) return;
     if (hasFailures && isMonitoring) {
       Alert.alert("API Failure Detected", "One or more APIs are not responding correctly.", [{ text: "OK" }]);
     }
-  }, [hasFailures, isMonitoring]);
+  }, [endpoints.length, hasFailures, isMonitoring]);
 
   const handleAddEndpoint = (endpoint: string) => {
     setEndpoints([...endpoints, endpoint]);

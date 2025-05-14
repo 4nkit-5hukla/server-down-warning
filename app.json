@@ -15,7 +15,8 @@
           "NSAllowsArbitraryLoads": true
         },
         "UIBackgroundModes": [
-          "fetch"
+          "fetch",
+          "audio"
         ]
       }
     },
@@ -30,7 +31,8 @@
         "INTERNET",
         "ACCESS_NETWORK_STATE",
         "RECEIVE_BOOT_COMPLETED",
-        "WAKE_LOCK"
+        "WAKE_LOCK",
+        "FOREGROUND_SERVICE"
       ]
     },
     "web": {
