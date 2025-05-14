@@ -86,6 +86,7 @@ export default function ApiMonitorHome() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
+    marginTop: 24,
   },
   scrollContent: {
     flexGrow: 1,
